@@ -28,7 +28,7 @@ data class TetrisBoard(
                 hero = hero,
                 heroBag = heroBag.minus(hero),
                 blocks = (0 until size.second).map {
-                    (0 until size.first).map { Color.Unset }
+                    (0 until size.first).map { Color.Unspecified }
                 },
                 velocity = 1,
                 gameStatus = InProgress,
@@ -96,9 +96,9 @@ data class TetrisBoard(
 
     private fun destroyCompletedRows(): TetrisBoard {
         with(blocks.toMutableList()) {
-            return if (removeAll { row -> row.all { it != Color.Unset } }) {
+            return if (removeAll { row -> row.all { it != Color.Unspecified } }) {
                 val diff = this@TetrisBoard.size.second - size
-                addAll(0, (0 until diff).map { (0 until this@TetrisBoard.size.first).map { Color.Unset } })
+                addAll(0, (0 until diff).map { (0 until this@TetrisBoard.size.first).map { Color.Unspecified } })
                 copy(blocks = this, score = score + calculateScore(diff))
             } else this@TetrisBoard
         }
@@ -117,6 +117,6 @@ data class TetrisBoard(
 
     private fun isValidLocation(hero: TetrisBlock): Boolean = hero.coordinates.none {
         it.first < 0 || it.first > size.first - 1 || it.second > size.second - 1 ||
-                blocks[it.second][it.first] != Color.Unset
+                blocks[it.second][it.first] != Color.Unspecified
     }
 }

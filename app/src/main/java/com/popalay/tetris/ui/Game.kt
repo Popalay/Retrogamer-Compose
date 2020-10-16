@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedTask
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.launchInComposition
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,7 +45,7 @@ fun Game() {
     val onTap: (Offset) -> Unit = { state = if (state.gameStatus == GameStatus.GameOver) state.restart() else state.rotate() }
     val tickerChannel = remember { ticker(delayMillis = 300 / state.velocity) }
 
-    launchInComposition {
+    LaunchedTask {
         for (event in tickerChannel) {
             state = state.gameTick()
         }

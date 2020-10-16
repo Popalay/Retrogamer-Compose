@@ -25,7 +25,7 @@ fun DrawScope.drawProjection(hero: TetrisBlock, blockSize: Float) {
 fun DrawScope.drawBoard(board: List<List<Color>>, blockSize: Float) {
     board.forEachIndexed { y, block ->
         block.forEachIndexed { x, color ->
-            if (color == Color.Unset) {
+            if (color == Color.Unspecified) {
                 val actualCenter = Offset(
                     x * blockSize + blockSize / 2F,
                     y * blockSize + blockSize / 2F
