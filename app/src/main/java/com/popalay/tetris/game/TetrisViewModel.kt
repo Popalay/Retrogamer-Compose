@@ -8,10 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.popalay.tetris.game.GameStatus.GameOver
 import com.popalay.tetris.game.GameStatus.InProgress
 import com.popalay.tetris.game.GameStatus.Pause
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TetrisViewModel : ViewModel() {
     val state = mutableStateOf(State.initial(12 to 24))
@@ -28,8 +30,10 @@ class TetrisViewModel : ViewModel() {
     }
 
     private suspend fun handleIntents() {
-        intents.consumeAsFlow().collect { intent ->
-            state.value = reduce(state.value, intent)
+        withContext(Dispatchers.Default) {
+            intents.consumeAsFlow().collect { intent ->
+                state.value = reduce(state.value, intent)
+            }
         }
     }
 
