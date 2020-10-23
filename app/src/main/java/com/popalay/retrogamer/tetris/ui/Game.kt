@@ -1,4 +1,4 @@
-package com.popalay.tetris.ui
+package com.popalay.retrogamer.tetris.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Text
@@ -27,10 +27,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
 import androidx.ui.tooling.preview.Preview
-import com.popalay.tetris.game.GameStatus
-import com.popalay.tetris.game.TetrisBlock
-import com.popalay.tetris.game.TetrisViewModel
-import com.popalay.tetris.game.TetrisViewModel.Intent
+import com.popalay.retrogamer.TetrisComposeTheme
+import com.popalay.retrogamer.tetris.game.GameStatus
+import com.popalay.retrogamer.tetris.game.TetrisBlock
+import com.popalay.retrogamer.tetris.game.TetrisViewModel
+import com.popalay.retrogamer.tetris.game.TetrisViewModel.Intent
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.ticker
 import kotlin.math.min

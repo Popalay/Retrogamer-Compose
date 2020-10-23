@@ -1,4 +1,4 @@
-package com.popalay.tetris.game
+package com.popalay.retrogamer.tetris.game
 
 import androidx.compose.ui.graphics.Color
 import kotlin.math.absoluteValue

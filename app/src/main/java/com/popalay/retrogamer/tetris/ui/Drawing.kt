@@ -1,4 +1,4 @@
-package com.popalay.tetris.ui
+package com.popalay.retrogamer.tetris.ui
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -8,9 +8,9 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.popalay.tetris.game.Board
-import com.popalay.tetris.game.BoardSize
-import com.popalay.tetris.game.TetrisBlock
+import com.popalay.retrogamer.tetris.game.Board
+import com.popalay.retrogamer.tetris.game.BoardSize
+import com.popalay.retrogamer.tetris.game.TetrisBlock
 
 fun DrawScope.drawHero(hero: TetrisBlock, blockSize: Float) {
     hero.coordinates.forEach {

@@ -1,13 +1,13 @@
-package com.popalay.tetris.game
+package com.popalay.retrogamer.tetris.game
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.gesture.Direction
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.popalay.tetris.game.GameStatus.GameOver
-import com.popalay.tetris.game.GameStatus.InProgress
-import com.popalay.tetris.game.GameStatus.Pause
+import com.popalay.retrogamer.tetris.game.GameStatus.GameOver
+import com.popalay.retrogamer.tetris.game.GameStatus.InProgress
+import com.popalay.retrogamer.tetris.game.GameStatus.Pause
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect

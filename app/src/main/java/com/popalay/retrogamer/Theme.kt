@@ -1,4 +1,4 @@
-package com.popalay.tetris.ui
+package com.popalay.retrogamer
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme

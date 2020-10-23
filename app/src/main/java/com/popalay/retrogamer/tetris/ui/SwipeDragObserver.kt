@@ -1,4 +1,4 @@
-package com.popalay.tetris.ui
+package com.popalay.retrogamer.tetris.ui
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.gesture.Direction
