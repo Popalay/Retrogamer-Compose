@@ -1,4 +1,4 @@
-package com.popalay.tetris.utils
+package com.popalay.tetris.game
 
 import androidx.compose.ui.gesture.Direction
 import androidx.compose.ui.graphics.Color
@@ -30,11 +30,13 @@ operator fun Pair<Int, Int>.div(pair: Pair<Int, Int>): Pair<Int, Int> =
 operator fun Pair<Int, Int>.times(pair: Pair<Int, Int>): Pair<Int, Int> =
     Pair(first * pair.first, second * pair.second)
 
-fun <T> List<List<T>>.update(i: Int, j: Int, item: T): List<List<T>> = toMutableList().apply {
+fun <T> MutableList<List<T>>.update(i: Int, j: Int, item: T): MutableList<List<T>> = apply {
     this[j] = this[j].toMutableList().apply {
         this[i] = item
     }
 }
+
+val <T> List<List<T>>.multiSize: Pair<Int, Int> get() = (firstOrNull()?.size ?: 0) to size
 
 fun Direction.toOffset() = when (this) {
     Direction.LEFT -> -1 to 0

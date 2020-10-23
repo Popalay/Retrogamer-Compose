@@ -1,8 +1,6 @@
 package com.popalay.tetris.game
 
 import androidx.compose.ui.graphics.Color
-import com.popalay.tetris.utils.plus
-import com.popalay.tetris.utils.shapeVariants
 import kotlin.math.absoluteValue
 import kotlin.random.Random
 

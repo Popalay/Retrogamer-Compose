@@ -8,6 +8,8 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.popalay.tetris.game.Board
+import com.popalay.tetris.game.BoardSize
 import com.popalay.tetris.game.TetrisBlock
 
 fun DrawScope.drawHero(hero: TetrisBlock, blockSize: Float) {
@@ -22,7 +24,7 @@ fun DrawScope.drawProjection(hero: TetrisBlock, blockSize: Float) {
     }
 }
 
-fun DrawScope.drawBoard(board: List<List<Color>>, blockSize: Float) {
+fun DrawScope.drawBoard(board: Board, blockSize: Float) {
     board.forEachIndexed { y, block ->
         block.forEachIndexed { x, color ->
             if (color == Color.Unspecified) {
@@ -92,8 +94,8 @@ fun DrawScope.drawTriangle(color: Color, point1: Offset, point2: Offset, point3:
     drawPath(path, color)
 }
 
-fun DrawScope.drawBorderBackground(sizeInt: Pair<Int, Int>) {
-    val ratio = sizeInt.second / sizeInt.first
+fun DrawScope.drawBorderBackground(boardSize: BoardSize) {
+    val ratio = boardSize.second / boardSize.first
     drawRect(
         color = Color.Black,
         topLeft = Offset.Zero - Offset(2.dp.toPx(), 2.dp.toPx()),

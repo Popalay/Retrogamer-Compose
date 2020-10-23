@@ -12,9 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedTask
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.drawBehind
@@ -27,10 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.viewModel
 import androidx.ui.tooling.preview.Preview
 import com.popalay.tetris.game.GameStatus
 import com.popalay.tetris.game.TetrisBlock
-import com.popalay.tetris.game.TetrisBoard
+import com.popalay.tetris.game.TetrisViewModel
+import com.popalay.tetris.game.TetrisViewModel.Intent
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.ticker
 import kotlin.math.min
@@ -38,16 +38,18 @@ import kotlin.math.min
 @OptIn(ObsoleteCoroutinesApi::class)
 @Composable
 fun Game() {
-    var state by remember { mutableStateOf(TetrisBoard.start(12 to 24)) }
+    val viewModel = viewModel<TetrisViewModel>()
+    val state by viewModel.state
+
     val dragObserver = with(DensityAmbient.current) {
-        SwipeDragObserver(TouchSlop.toPx(), MinFlingVelocity.toPx()) { state = state.move(it, true) }
+        SwipeDragObserver(TouchSlop.toPx(), MinFlingVelocity.toPx()) { viewModel.consume(Intent.Swipe(it, true)) }
     }
-    val onTap: (Offset) -> Unit = { state = if (state.gameStatus == GameStatus.GameOver) state.restart() else state.rotate() }
+    val onTap: (Offset) -> Unit = { viewModel.consume(Intent.Tap) }
     val tickerChannel = remember { ticker(delayMillis = 300 / state.velocity) }
 
     LaunchedTask {
         for (event in tickerChannel) {
-            state = state.gameTick()
+            viewModel.consume(Intent.GameTick)
         }
     }
 
@@ -68,11 +70,11 @@ fun Game() {
 }
 
 @Composable
-fun Statistic(state: TetrisBoard, modifier: Modifier = Modifier) {
+fun Statistic(state: TetrisViewModel.State, modifier: Modifier = Modifier) {
     Row(modifier.padding(all = 16.dp), verticalAlignment = Alignment.CenterVertically) {
         Text("Score: ${state.score}")
         Text("Next:", modifier = Modifier.padding(start = 16.dp))
-        NextHero(block = state.nextHero.rotate(), modifier = Modifier.padding(start = 8.dp))
+        NextHero(block = state.heroBag.first().rotate(), modifier = Modifier.padding(start = 8.dp))
     }
 }
 
@@ -87,7 +89,7 @@ fun GameOver(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Board(state: TetrisBoard, modifier: Modifier = Modifier) {
+fun Board(state: TetrisViewModel.State, modifier: Modifier = Modifier) {
     Canvas(
         modifier
             .fillMaxSize()
@@ -99,7 +101,7 @@ fun Board(state: TetrisBoard, modifier: Modifier = Modifier) {
         )
         drawBoard(state.blocks, blockSize)
         drawHero(state.hero, blockSize)
-        drawProjection(state.getProjection(state.hero), blockSize)
+        drawProjection(state.projection, blockSize)
     }
 }
 
