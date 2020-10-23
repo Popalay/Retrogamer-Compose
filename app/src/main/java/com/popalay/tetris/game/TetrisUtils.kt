@@ -38,6 +38,36 @@ fun <T> MutableList<List<T>>.update(i: Int, j: Int, item: T): MutableList<List<T
 
 val <T> List<List<T>>.multiSize: Pair<Int, Int> get() = (firstOrNull()?.size ?: 0) to size
 
+fun TetrisBlock.createProjection(blocks: Board): TetrisBlock {
+    var projection = this
+    while (projection.move(0 to 1).isValid(blocks)) {
+        projection = projection.move(0 to 1)
+    }
+    return projection
+}
+
+fun Board.modifyBlocks(block: TetrisBlock): Pair<Board, Int> {
+    val size = multiSize
+    var newBoard = this.toMutableList()
+    var destroyedRows = 0
+    block.coordinates.forEach {
+        newBoard = newBoard.update(it.first, it.second, block.color)
+    }
+    if (newBoard.removeAll { row -> row.all { it != Color.Unspecified } }) {
+        destroyedRows = size.second - newBoard.size
+        newBoard.addAll(0, (0 until destroyedRows).map { (0 until size.first).map { Color.Unspecified } })
+    }
+    return newBoard to destroyedRows
+}
+
+fun TetrisBlock.isValid(blocks: Board): Boolean {
+    val size = blocks.multiSize
+    return coordinates.none {
+        it.first < 0 || it.first > size.first - 1 || it.second > size.second - 1 ||
+                blocks[it.second][it.first] != Color.Unspecified
+    }
+}
+
 fun Direction.toOffset() = when (this) {
     Direction.LEFT -> -1 to 0
     Direction.UP -> 0 to -1
