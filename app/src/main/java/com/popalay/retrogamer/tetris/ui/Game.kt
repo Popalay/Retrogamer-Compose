@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedTask
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,9 +24,13 @@ import androidx.compose.ui.gesture.dragGestureFilter
 import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.ui.tooling.preview.Preview
 import com.popalay.retrogamer.TetrisComposeTheme
 import com.popalay.retrogamer.tetris.game.GameStatus
@@ -47,6 +52,25 @@ fun Game() {
     }
     val onTap: (Offset) -> Unit = { viewModel.consume(Intent.Tap) }
     val tickerChannel = remember { ticker(delayMillis = 300 / state.velocity) }
+
+    val lifecycleOwner = LifecycleOwnerAmbient.current
+    onCommit {
+        val observer = object : LifecycleObserver {
+            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            fun onResume() {
+                viewModel.consume(Intent.Resume)
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+            fun onPause() {
+                viewModel.consume(Intent.Pause)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     LaunchedTask {
         for (event in tickerChannel) {
